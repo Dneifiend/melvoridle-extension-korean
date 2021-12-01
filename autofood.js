@@ -1,4 +1,4 @@
-class AutoFood {
+class AutoFight {
     #autofoodInterval;
     constructor() {
         this.stat = "off"
@@ -53,7 +53,7 @@ class AutoFood {
         this.#autofoodInterval = setInterval(() => {
             if (this.foodcount == 0) {
                 clearInterval(_autofood)
-                game.combat.runButton.click()
+                game.combat.stopCombat()
                 console.log("food count is 0. auto food is off and escape from combat.")
                 return
             }
@@ -69,14 +69,10 @@ class AutoFood {
         }, 100);
     }
 
-    // TODO 
-    // game.combat.runButton.click()
-
-
 }
 
 
 
 
-var af = new AutoFood()
+var af = new AutoFight()
 af.on
