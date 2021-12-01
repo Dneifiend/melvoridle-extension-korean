@@ -1,5 +1,7 @@
 class AutoFight {
     #autofoodInterval;
+    #autoLootInterval;
+
     constructor() {
         this.stat = "off"
     }
