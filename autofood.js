@@ -54,7 +54,7 @@ class AutoFight {
     autoFood() {
         this.#autofoodInterval = setInterval(() => {
             if (this.foodcount == 0) {
-                clearInterval(_autofood)
+                clearInterval(this.#autofoodInterval)
                 game.combat.stopCombat()
                 console.log("food count is 0. auto food is off and escape from combat.")
                 return
