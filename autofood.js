@@ -53,7 +53,8 @@ class AutoFood {
         this.#autofoodInterval = setInterval(() => {
             if (this.foodcount == 0) {
                 clearInterval(_autofood)
-                alert('No food left!')
+                game.combat.runButton.click()
+                console.log("food count is 0. auto food is off and escape from combat.")
                 return
             }
 
@@ -67,6 +68,9 @@ class AutoFood {
 
         }, 100);
     }
+
+    // TODO 
+    // game.combat.runButton.click()
 
 
 }
