@@ -59,7 +59,6 @@ class AutoFight {
             // 음식 갯수가 eatCount보자 모자르면 전투 중단
             if (this.foodcount == 0 || this.foodcount < eatCount) {
                 this.off
-                clearInterval(this.#autofoodInterval)
 
                 game.combat.stopCombat()
                 game.thieving.stop()
