@@ -16,23 +16,23 @@ class AutoFight {
     }
 
     get foodcount() {
-        try { return parseInt(document.querySelector('#combat-food-container').textContent.match(/(?<=\()\d+(?=\))/)[0]) }
+        try { return player.food.currentSlot.quantity }
         catch (e) { throw e }
     }
 
     get currentHealth() {
-        try { return parseInt(document.querySelector('#combat-player-hitpoints-current-1').textContent) }
+        try { return player.hitpoints }
         catch (e) { throw e }
 
     }
 
     get currentFoodRestoreValue() {
-        try { return parseInt(document.querySelector('#combat-food-container').textContent.match(/\+\d+/)[0]) }
+        try { return getNumberMultiplierValue(player.food.currentSlot.item.healsFor) }
         catch (e) { throw e }
     }
 
     get maxHealth() {
-        try { return parseInt(document.querySelector('#combat-player-hitpoints-max').textContent) }
+        try { return player.stats.maxHitpoints }
         catch (e) { throw e }
     }
 
@@ -53,28 +53,31 @@ class AutoFight {
 
     autoFood() {
         this.#autofoodInterval = setInterval(() => {
-            if (this.foodcount == 0) {
+            var eatCount = Math.floor((this.maxHealth - this.currentHealth) / this.currentFoodRestoreValue)
+
+            // 음식 갯수가 eatCount보자 모자르면 전투 중단
+            if (this.foodcount == 0 || this.foodcount < eatCount) {
                 clearInterval(this.#autofoodInterval)
-                game.combat.stopCombat()
-                console.log("food count is 0. auto food is off and escape from combat.")
+
+                alert("음식이 부족하여 전투/절도를 중단합니다.")
+                if (game.combat.isInCombat) {
+                    game.combat.stopCombat()
+                }
+                if (game.thieving.isActive) {
+                    game.thieving.stop()
+                }
                 return
             }
 
-            if (this.foodcount > 0) {
-                if (this.currentHealth < this.maxHealth) {
-                    if (this.currentHealth + this.currentFoodRestoreValue <= this.maxHealth) {
-                        document.querySelector('#combat-food-container button').click()
-                    }
-                }
+            if (eatCount > 0) {
+                // console.log(eatCount)
+                player.eatFood(eatCount, false)
             }
+
 
         }, 100);
     }
-
 }
-
-
-
 
 var af = new AutoFight()
 af.on
