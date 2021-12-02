@@ -14,3 +14,10 @@ function processItemNotify(itemID, qty) {
         stopOnFocus: false,
     }).showToast();
 }
+
+
+
+
+
+// TODO 잡템 필터해서 팔거나 옮기거나 하는 기능 추가
+bank.filter(itemInfo => items[itemInfo.id].type === "Junk").map(e => getItemName(e.id))
