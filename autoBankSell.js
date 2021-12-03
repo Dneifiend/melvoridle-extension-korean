@@ -1,13 +1,14 @@
+function sellBankTapAll(tabIdx) {
+    // 자동 인벤토리 판매
+    var ignoreSellConfirm = false;
+    if (!sellItemMode) {
+        toggleSellItemMode()
+    }
+    updateSellItemMode()
+    bank.filter(e => e.tab === tabIdx).forEach(itemObj => {
+        selectBankItem(itemObj.id)
+        // addItemToItemSaleArray(itemObj)
+    })
 
-// 자동 인벤토리 판매
-var ignoreSellConfirm = false;
-if (!sellItemMode) {
-    toggleSellItemMode()
+    confirmSellModeSelection(ignoreSellConfirm)
 }
-updateSellItemMode()
-bank.filter(e => e.tab === 9).forEach(itemObj => {
-    selectBankItem(itemObj.id)
-    // addItemToItemSaleArray(itemObj)
-})
-
-confirmSellModeSelection(ignoreSellConfirm)
