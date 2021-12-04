@@ -1,6 +1,5 @@
-function sellBankTapAll(tabIdx) {
+function sellBankTapAll(tabIdx, silence = false) {
     // 자동 인벤토리 판매
-    var ignoreSellConfirm = false;
     if (!sellItemMode) {
         toggleSellItemMode()
     }
@@ -10,5 +9,5 @@ function sellBankTapAll(tabIdx) {
         // addItemToItemSaleArray(itemObj)
     })
 
-    confirmSellModeSelection(ignoreSellConfirm)
+    confirmSellModeSelection(silence)
 }
