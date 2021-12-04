@@ -1,6 +1,5 @@
 class AutoFight {
     #autofoodInterval;
-    #autoLootInterval;
 
     constructor() {
         this.stat = "off"
@@ -56,14 +55,21 @@ class AutoFight {
             var eatCount = Math.floor((this.maxHealth - this.currentHealth) / this.currentFoodRestoreValue)
             if (eatCount === 0) return
 
-            // 음식 갯수가 eatCount보자 모자르면 전투 중단
+
+            // 현재 선택한 음식 갯수가 0이면 다른 슬롯에서 음식을 찾아서 선택한다.
+            if (this.foodcount === 0) {
+                for (let i = 0; i < player.food.slots.length; i++) {
+                    if (player.food.slots[i].quantity > 0) {
+                        return player.selectFood(i);
+                    }
+                }
+            }
+
+            // 음식 갯수가 eatCount보다 부족하면 전투를 중지한다.
             if (this.foodcount == 0 || this.foodcount < eatCount) {
                 this.off
-                clearInterval(this.#autofoodInterval)
-
                 game.combat.stopCombat()
                 game.thieving.stop()
-
                 alert("음식이 부족하여 전투/절도를 중단합니다.")
                 return
             }
@@ -80,19 +86,7 @@ af.on
 
 
 
-// 자동 루팅
-var _lootInterval = setInterval(() => {
-    var lootLimitCount
-    lootLimitCount = 1
-    if (game.combat.loot.drops.length >= lootLimitCount) {
-        game.combat.loot.lootAll()
-    }
-}, 1000)
-
-
-
-
-// 아이템 획득 토스트 확장
+// 아이템 획득 노티피케이션
 function processItemNotify(itemID, qty) {
     let access = "";
     let bankCount = Object.values(bank).find(e => e.id === itemID).qty
@@ -108,3 +102,21 @@ function processItemNotify(itemID, qty) {
         stopOnFocus: false,
     }).showToast();
 }
+
+
+
+
+
+// TODO 잡템 필터해서 팔거나 옮기거나 하는 기능 추가
+bank.filter(itemInfo => items[itemInfo.id].type === "Junk").map(e => getItemName(e.id))
+
+
+// 자동 전투인벤토리 비우기
+var _lootInterval = setInterval(() => {
+    var lootLimitCount
+    lootLimitCount = 1
+    if (game.combat.loot.drops.length >= lootLimitCount) {
+        game.combat.loot.lootAll()
+    }
+}, 1000)
+

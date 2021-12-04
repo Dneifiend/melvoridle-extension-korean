@@ -1,43 +1,26 @@
 class melvorIdleLanguage {
     constructor() {
-        var targetKeys = ["AGILITY",
-            "ASTROLOGY",
-            "DUNGEON",
-            "MONSTER_NAME",
-            "EQUIPMENT_STAT",
-            "EQUIP_SLOT",
-            "FARMING_MISC",
-            "FISHING",
-            "GOLBIN_RAID",
-            "ITEM_DESCRIPTION",
-            "ITEM_NAME",
-            "MAGIC",
-            "ORE_NAME",
-            "PAGE_NAME",
-            "PAGE_NAME_MISC",
-            "POTION_NAME",
-            "PET_NAME",
-            "SHOP_CAT",
-            "SHOP_NAME",
-            "SKILL_NAME",
-            "THIEVING",
-            "TREE_NAME"]
-
-        var ko = fetch('https://melvoridle.com/lang/ko.json')
+        this.ko = fetch('https://melvoridle.com/lang/ko.json')
             .then(res => res.json())
-        var en = fetch('https://melvoridle.com/lang/en.json')
+        this.en = fetch('https://melvoridle.com/lang/en.json')
             .then(res => res.json())
 
-        Promise.all([ko, en]).then(res => {
-            this.enKo = {}
+        this.enko = {}
+
+        Promise.all([this.ko, this.en]).then(res => {
+            var targetKeys = Object.keys(res[0])
+            this.ko = res[0]
+            this.en = res[1]
             targetKeys.forEach((Category, idx) => {
-
                 Object.keys(res[0][Category]).forEach(key => {
-                    try { var enKey = res[1][Category][key].toUpperCase() || key }
+                    try {
+                        var enKey = res[1][Category][key]
+                        this.enko[enKey] = res[0][Category][key]
+                    }
+                    catch (err) {
+                        console.log("error", Category, key, err)
+                    }
 
-                    catch { console.log(Category, key) }
-
-                    this.enKo[enKey] = res[0][Category][key]
                 })
             })
         })
@@ -47,9 +30,9 @@ class melvorIdleLanguage {
     enToKoEvent() {
         document.querySelectorAll('h1, span, p, dt, a, figcaption, font, th').forEach((ele, idx) => {
             if (ele.childElementCount === 0) {
-                var kr = this.enKo[ele.textContent.trim().replace(/\s/g, " ").toUpperCase()]
-                if (kr) {
-                    ele.textContent = kr
+                var findEn = Object.keys(this.enko).find(en => en.toUpperCase() === ele.innerText.toUpperCase())?.[0]
+                if (findEn) {
+                    ele.innerText = this.enko[findEn]
                 }
             }
         })
@@ -67,11 +50,8 @@ class melvorIdleLanguage {
             transOb.disconnect()
             return "translator is off"
         }
-
-
     }
-
 }
 
 var wikitrans = new melvorIdleLanguage()
-wikitrans.monitor("on")
+// wikitrans.monitor("on")
