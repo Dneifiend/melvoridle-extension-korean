@@ -108,7 +108,7 @@ function processItemNotify(itemID, qty) {
 
 
 // TODO 잡템 필터해서 팔거나 옮기거나 하는 기능 추가
-bank.filter(itemInfo => items[itemInfo.id].type === "Junk").map(e => getItemName(e.id))
+// bank.filter(itemInfo => items[itemInfo.id].type === "Junk").map(e => getItemName(e.id))
 
 
 // 자동 전투인벤토리 비우기
